@@ -162,3 +162,6 @@ cython_debug/
 #.idea/
 
 clickhouse-setup/data
+
+# Custom Secrets & Configs
+.secrets
