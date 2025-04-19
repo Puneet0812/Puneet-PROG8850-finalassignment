@@ -37,13 +37,13 @@ jobs:
         done
 
     - name: 2. Initial Schema Deployment - Create ClimateData Table
-      run: mysql -h 127.0.0.1 -P 3306 -uroot -pRambo@123 < sql/create_climatedata.sql
+      run: mysql -h 127.0.0.1 -P 3306 -uroot -pRambo@123 < sql/01_create_climatedata.sql
 
     - name: 3. Schema Update - Add Humidity Column
-      run: mysql -h 127.0.0.1 -P 3306 -uroot -pRambo@123 < sql/add_humidity.sql
+      run: mysql -h 127.0.0.1 -P 3306 -uroot -pRambo@123 < sql/02_add_humidity_column.sql
 
     - name: 4. Data Seeding - Insert Sample Climate Data
-      run: mysql -h 127.0.0.1 -P 3306 -uroot -pRambo@123 < sql/seed_data.sql
+      run: mysql -h 127.0.0.1 -P 3306 -uroot -pRambo@123 < sql/03_seed_climatedata.sql
 
     - name: 5. Concurrent Query Execution - Install Python Dependencies
       run: pip install mysql-connector-python
