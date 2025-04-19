@@ -37,19 +37,19 @@ jobs:
 
     - name: Wait for MySQL to become ready
       run: |
-        until mysqladmin ping -h 127.0.0.1 -P 3306 -u$MYSQL_USER -p$MYSQL_PASSWORD --silent; do
+        until mysqladmin ping -h 127.0.0.1 -P 3306 -u$MYSQL_USER -p"$MYSQL_PASSWORD" --silent; do
           echo "Waiting for MySQL..."
           sleep 3
         done
 
     - name: 2. Initial Schema Deployment - Create ClimateData Table
-      run: mysql -h 127.0.0.1 -P 3306 -u$MYSQL_USER -p$MYSQL_PASSWORD < sql/01_create_climatedata.sql
+      run: mysql -h 127.0.0.1 -P 3306 -u$MYSQL_USER -p"$MYSQL_PASSWORD" < sql/01_create_climatedata.sql
 
     - name: 3. Schema Update - Add Humidity Column
-      run: mysql -h 127.0.0.1 -P 3306 -u$MYSQL_USER -p$MYSQL_PASSWORD < sql/02_add_humidity_column.sql
+      run: mysql -h 127.0.0.1 -P 3306 -u$MYSQL_USER -p"$MYSQL_PASSWORD" < sql/02_add_humidity_column.sql
 
     - name: 4. Data Seeding - Insert Sample Climate Data
-      run: mysql -h 127.0.0.1 -P 3306 -u$MYSQL_USER -p$MYSQL_PASSWORD < sql/03_seed_climatedata.sql
+      run: mysql -h 127.0.0.1 -P 3306 -u$MYSQL_USER -p"$MYSQL_PASSWORD" < sql/03_seed_climatedata.sql
 
     - name: 5. Concurrent Query Execution - Install Python Dependencies
       run: pip install mysql-connector-python
@@ -60,16 +60,16 @@ jobs:
     - name: 6. Validation Step - Check Table, Column, Seeded Data, and Concurrent Execution Results
       run: |
         echo " Table structure:"
-        mysql -h 127.0.0.1 -P 3306 -u$MYSQL_USER -p$MYSQL_PASSWORD -e "USE $MYSQL_DATABASE; DESCRIBE ClimateData;"
+        mysql -h 127.0.0.1 -P 3306 -u$MYSQL_USER -p"$MYSQL_PASSWORD" -e "USE $MYSQL_DATABASE; DESCRIBE ClimateData;"
 
         echo " All data:"
-        mysql -h 127.0.0.1 -P 3306 -u$MYSQL_USER -p$MYSQL_PASSWORD -e "USE $MYSQL_DATABASE; SELECT * FROM ClimateData;"
+        mysql -h 127.0.0.1 -P 3306 -u$MYSQL_USER -p"$MYSQL_PASSWORD" -e "USE $MYSQL_DATABASE; SELECT * FROM ClimateData;"
 
         echo " Verify update: humidity for Toronto"
-        mysql -h 127.0.0.1 -P 3306 -u$MYSQL_USER -p$MYSQL_PASSWORD -e "USE $MYSQL_DATABASE; SELECT humidity FROM ClimateData WHERE location='Toronto';"
+        mysql -h 127.0.0.1 -P 3306 -u$MYSQL_USER -p"$MYSQL_PASSWORD" -e "USE $MYSQL_DATABASE; SELECT humidity FROM ClimateData WHERE location='Toronto';"
 
         echo " Verify insert: Delhi"
-        mysql -h 127.0.0.1 -P 3306 -u$MYSQL_USER -p$MYSQL_PASSWORD -e "USE $MYSQL_DATABASE; SELECT * FROM ClimateData WHERE location='Delhi';"
+        mysql -h 127.0.0.1 -P 3306 -u$MYSQL_USER -p"$MYSQL_PASSWORD" -e "USE $MYSQL_DATABASE; SELECT * FROM ClimateData WHERE location='Delhi';"
 
         echo " Verify select: temperature > 20°C"
-        mysql -h 127.0.0.1 -P 3306 -u$MYSQL_USER -p$MYSQL_PASSWORD -e "USE $MYSQL_DATABASE; SELECT * FROM ClimateData WHERE temperature > 20;"
+        mysql -h 127.0.0.1 -P 3306 -u$MYSQL_USER -p"$MYSQL_PASSWORD" -e "USE $MYSQL_DATABASE; SELECT * FROM ClimateData WHERE temperature > 20;"
