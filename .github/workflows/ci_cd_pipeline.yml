@@ -26,11 +26,11 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v3
 
-    - name: Load Secrets
+    - name: Load Secrets from GitHub
       run: |
-        echo "MYSQL_USER=$(grep '^MYSQL_USER=' .secrets | cut -d '=' -f2-)" >> $GITHUB_ENV
-        echo "MYSQL_PASSWORD=$(grep '^MYSQL_PASSWORD=' .secrets | cut -d '=' -f2-)" >> $GITHUB_ENV
-        echo "MYSQL_DATABASE=$(grep '^MYSQL_DATABASE=' .secrets | cut -d '=' -f2-)" >> $GITHUB_ENV
+        echo "MYSQL_USER=${{ secrets.MYSQL_USER }}" >> $GITHUB_ENV
+        echo "MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }}" >> $GITHUB_ENV
+        echo "MYSQL_DATABASE=${{ secrets.MYSQL_DATABASE }}" >> $GITHUB_ENV
 
     - name: 1. Environment Setup - Install MySQL Client
       run: sudo apt-get update && sudo apt-get install -y mysql-client
