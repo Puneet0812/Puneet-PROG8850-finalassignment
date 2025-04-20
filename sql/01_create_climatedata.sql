@@ -8,3 +8,7 @@ CREATE TABLE IF NOT EXISTS ClimateData (
     temperature FLOAT NOT NULL,
     precipitation FLOAT NOT NULL
 );
+
+
+
+
